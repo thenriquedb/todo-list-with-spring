@@ -1,11 +1,11 @@
 package br.com.thenriquedb.todolist.task;
 
+import br.com.thenriquedb.todolist.utils.Utils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -53,5 +53,20 @@ public class TaskController {
         var tasks = this.taskRepository.findAllByUserId(userId);
 
         return ResponseEntity.ok(tasks);
+    }
+
+    @PutMapping("/{taskId}")
+    public ResponseEntity update(@RequestBody TaskModel taskModel, @PathVariable UUID taskId) {
+        var task = this.taskRepository.findById(taskId).orElse(null);
+
+        if(task == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
+        }
+
+        Utils.copyNonNullableProperties(taskModel, task);
+
+        var updatedTask = this.taskRepository.save(task);
+
+        return ResponseEntity.status(HttpStatus.OK).body(updatedTask);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -24,6 +25,27 @@ public class TaskController {
         if(task != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("There is already a task with this title");
         }
+
+        LocalDateTime today = LocalDateTime.now();
+
+        if(today.isAfter(taskModel.getStartAt())) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("The start date cannot be less than the current date ");
+        }
+
+        if(today.isAfter(taskModel.getEndAt())) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("The end date cannot be less than the current date ");
+        }
+
+        if(taskModel.getEndAt().isBefore(taskModel.getStartAt())) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("The end date cannot be less than the start date");
+        }
+
 
         var userId = (UUID) request.getAttribute("userId");
         taskModel.setUserId(userId);

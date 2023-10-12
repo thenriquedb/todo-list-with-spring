@@ -1,4 +1,4 @@
-package br.com.thenriquedb.todolist;
+package br.com.thenriquedb.todolist.filter;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import br.com.thenriquedb.todolist.user.IUserRepository;

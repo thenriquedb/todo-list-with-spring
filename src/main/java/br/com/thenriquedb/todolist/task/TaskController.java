@@ -4,10 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -20,12 +17,6 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity create(@RequestBody TaskModel taskModel, HttpServletRequest request) {
-        var task = this.taskRepository.findByTitle(taskModel.getTitle());
-
-        if(task != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("There is already a task with this title");
-        }
-
         LocalDateTime today = LocalDateTime.now();
 
         if(today.isAfter(taskModel.getStartAt())) {
@@ -53,5 +44,14 @@ public class TaskController {
         var createdTask = this.taskRepository.save(taskModel);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
+    }
+
+    @GetMapping
+    public ResponseEntity list( HttpServletRequest request) {
+        var userId = (UUID) request.getAttribute("userId");
+
+        var tasks = this.taskRepository.findAllByUserId(userId);
+
+        return ResponseEntity.ok(tasks);
     }
 }

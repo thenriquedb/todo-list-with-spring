@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionHandlerController {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
-        String message = exception.getMostSpecificCause().getMessage()
+        String message = exception.getMostSpecificCause().getMessage();
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)

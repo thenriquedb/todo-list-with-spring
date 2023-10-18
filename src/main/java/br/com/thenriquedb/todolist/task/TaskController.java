@@ -1,6 +1,7 @@
 package br.com.thenriquedb.todolist.task;
 
 import br.com.thenriquedb.todolist.utils.Utils;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -20,6 +22,7 @@ public class TaskController {
     private ITaskRepository taskRepository;
 
     @PostMapping
+    @Operation(summary = "Create new task")
     public ResponseEntity create(@RequestBody TaskModel taskModel, HttpServletRequest request) {
         LocalDateTime today = LocalDateTime.now();
 
@@ -51,6 +54,7 @@ public class TaskController {
     }
 
     @GetMapping
+    @Operation(summary = "List all tasks by user")
     public ResponseEntity list( HttpServletRequest request) {
         var userId = (UUID) request.getAttribute("userId");
 
@@ -59,7 +63,56 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
+    @GetMapping("/{taskId}")
+    @Operation(summary = "Get task by ID")
+    @SecurityRequirement(name = "basic-auth")
+    public ResponseEntity<Optional<TaskModel>> get(@PathVariable UUID taskId, HttpServletRequest request) {
+        var task = this.taskRepository.findById(taskId).orElse(null);
+        UUID userId = (UUID) request.getAttribute("userId");
+
+        if(task == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+
+        if(!task.getUserId().equals(userId)) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+
+        return ResponseEntity.ok().body(task);
+    }
+
+
+    @DeleteMapping("/{taskId}")
+    @Operation(summary = "Delete an existing task")
+    @SecurityRequirement(name = "basic-auth")
+    public ResponseEntity delete(
+            @PathVariable UUID taskId,
+            HttpServletRequest request) {
+        var task = this.taskRepository.findById(taskId).orElse(null);
+        UUID userId = (UUID) request.getAttribute("userId");
+
+        if(task == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Task not found");
+        }
+
+        if(!task.getUserId().equals(userId)) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Operation unauthorized");
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/{taskId}")
+    @Operation(summary = "Update existing task")
+    @SecurityRequirement(name = "basic-auth")
     public ResponseEntity update(
             @RequestBody TaskModel taskModel,
             @PathVariable UUID taskId,

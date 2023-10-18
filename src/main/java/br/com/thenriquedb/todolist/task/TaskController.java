@@ -1,6 +1,8 @@
 package br.com.thenriquedb.todolist.task;
 
 import br.com.thenriquedb.todolist.utils.Utils;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,8 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/tasks")
+@SecurityRequirement(name = "basic-auth")
+@Tag(name = "Task")
 public class TaskController {
     @Autowired
     private ITaskRepository taskRepository;

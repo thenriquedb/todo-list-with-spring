@@ -1,7 +1,7 @@
 ![img.png](header.png)
 
 # Todo List REST API
-![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
 
 Este projeto foi desenvolvido como parte do curso gratuito de Java oferecido pela Rocketseat. Trata-se de uma API Rest para gerenciamento de lista de tarefas, construída em Java com o framework Spring Boot.
 
@@ -136,8 +136,8 @@ Authorization: Basic Base64 (username:password)
 ```
 
 ## Melhorias
-- [ ] Adicionar endpoint para excluir tarefa;
-- [ ] Documentar a API utilizando Swagger;
+- [X] Adicionar endpoint para excluir tarefa;
+- [X] Documentar a API utilizando Swagger;
 - [ ] Adicionar testes para cada endpoint;
 - [ ] Substituir o H2 para o Postgress;
 - [ ] Melhorar o processo de autenticação.

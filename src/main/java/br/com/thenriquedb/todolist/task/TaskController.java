@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -66,7 +65,7 @@ public class TaskController {
     @GetMapping("/{taskId}")
     @Operation(summary = "Get task by ID")
     @SecurityRequirement(name = "basic-auth")
-    public ResponseEntity<Optional<TaskModel>> get(@PathVariable UUID taskId, HttpServletRequest request) {
+    public ResponseEntity get(@PathVariable UUID taskId, HttpServletRequest request) {
         var task = this.taskRepository.findById(taskId).orElse(null);
         UUID userId = (UUID) request.getAttribute("userId");
 

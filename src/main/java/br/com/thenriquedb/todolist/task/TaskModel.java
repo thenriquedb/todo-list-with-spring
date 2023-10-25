@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@Entity(name = "tb_tasks")
+@Entity(name = "tasks")
 public class TaskModel {
 
     @Id
